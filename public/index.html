@@ -17,15 +17,15 @@
 	  </tr>
 	  <tr>
 	    <td>Spot 1</td>
-	    <td>Vacant</td>
+	    <td id="spot1">Vacant</td>
 	  </tr>
 	  <tr>
 	    <td>Spot 2</td>
-	    <td>Vacant</td>
+	    <td id="spot2">Vacant</td>
 	  </tr>
 	  <tr>
 	    <td>Spot 3</td>
-	    <td>Vacant</td>
+	    <td  id="spot3">Vacant</td>
 	  </tr>
 	</table>
 
@@ -64,6 +64,12 @@
 	    	console.log(message.Message);
 		});
 
+		socket.on("updateTable", function(status) { 
+			console.log("INSIDE updateTable ON CLIENT");
+	    	console.log("status: " + status);
+	    	var id = "#" + status.term;
+	    	$(id).value = status.occupied;
+		});
 
 		$("#search_list").change(function() {
 			// the search word change callback
@@ -75,7 +81,7 @@
 	    
 			if (str != "none") {
 				var searchTerm = $(this).find('option:selected').text();
-				console.log(searchTerm);
+				//console.log(searchTerm);
 				socket.emit("searchPhrase", searchTerm);
 			} else {
 				socket.emit("searchPhrase", "");

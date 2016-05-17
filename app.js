@@ -9,12 +9,17 @@ var Particle = require('particle-api-js');
 
 var particle = new Particle();
 
+var spots = [];
+
 function getDataFromParticleCloud(variable) {
   particle.getVariable({ deviceId: '310047000447343232363230',
                          name: variable,
                          auth: 'f8093528e7b81caceeaecd0569423df524dffbab'
                        }).then(function(data) {
                           console.log('Device variable retrieved successfully:', data.body);
+                          spots[variable] = data.body.occupied;
+                          // If occupied, update the table, 
+                          // If not occupied, "Vacant"
                         }, function(err) {
                           //console.log('An error occurred while getting attrs:', err);
                         });  
@@ -51,6 +56,7 @@ io.on("connection", function (socket) {
         if (searchTerm.length > 0) {
           console.log("search phrase is: " + searchTerm);
           getDataFromParticleCloud(searchTerm);
+          socket.emit("updateTable", {"occupied" : spots[searchTerm], "term" : searchTerm});
         }
     });
 
