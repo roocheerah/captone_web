@@ -68,7 +68,8 @@
 			console.log("INSIDE updateTable ON CLIENT");
 	    	console.log("status: " + status);
 	    	var id = "#" + status.term;
-	    	$(id).value = status.occupied;
+	        console.log("id: " + id);
+	    	$(id).html("OCCUPIED");
 		});
 
 		$("#search_list").change(function() {
@@ -82,7 +83,7 @@
 			if (str != "none") {
 				var searchTerm = $(this).find('option:selected').text();
 				//console.log(searchTerm);
-				socket.emit("searchPhrase", searchTerm);
+				socket.emit("searchPhrase", str);
 			} else {
 				socket.emit("searchPhrase", "");
 			}
