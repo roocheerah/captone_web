@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Parking Monitoring App</title>
+	<link rel="stylesheet" type="text/css" href="/stylesheets/index.css">
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.js"></script>
+	<script src="http://localhost:3000/socket.io/socket.io.js"></script>
+	<script type="text/javascript" src="//cdn.jsdelivr.net/particle-api-js/5/particle.min.js">
+	</script>
+</head>
+<body>
+	<h1>Parking Status for Capitol Hill Parking</h1>
+	<table id="parkingtable">
+	  <tr>
+	    <th>Spot</th>
+	    <th>Status</th>
+	  </tr>
+	  <tr>
+	    <td>Spot 1</td>
+	    <td>Vacant</td>
+	  </tr>
+	  <tr>
+	    <td>Spot 2</td>
+	    <td>Vacant</td>
+	  </tr>
+	  <tr>
+	    <td>Spot 3</td>
+	    <td>Vacant</td>
+	  </tr>
+	</table>
+
+	<br/>
+
+	<div class="search_list">
+		<select id="search_list">
+			<option value="none">Choose a spot</option>
+			<option value="spot1">parking 1</option>
+			<option value="spot2">parking 2</option>
+			<option value = "spot3">parking 3</option>
+		</select>
+	</div>
+	<div id="clicked-state"></div>
+	<script type="text/javascript">
+
+		/*(map.addListener("clickMapObject", function (event) {
+		    $("#clicked-state").text(event.mapObject.title);
+		    // TODO: display tweets from the selected state
+		}); */
+
+		// update the parking lot every 1 second
+		//setInterval(function () {
+		//    // TODO: Fill in callback function here
+		//}, 1000);
+
+		var socket = io();
+
+		//var socket = io.connect("https://capstoneee475.firebaseapp.com/", {reconnect: true});
+		socket.on("connect", function () {
+			console.log("Connected!");
+		});
+
+		socket.on("receiveData", function(message) { 
+			console.log("INSIDE RECEIVE ON CLIENT");
+	    	console.log(message.Message);
+		});
+
+
+		$("#search_list").change(function() {
+			// the search word change callback
+			var str = "";
+			$("select option:selected" ).each(function() {
+				str = this.value;
+			});
+	    
+	    
+			if (str != "none") {
+				var searchTerm = $(this).find('option:selected').text();
+				console.log(searchTerm);
+				socket.emit("searchPhrase", searchTerm);
+			} else {
+				socket.emit("searchPhrase", "");
+			}
+		});
+
+	</script>
+</body>
+</html>

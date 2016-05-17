@@ -1,0 +1,49 @@
+@font-face {
+    font-family: pacifico;
+    src: url(../fonts/Pacifico.ttf);
+}
+
+body {
+    background: url("../images/concrete_wall.png");
+    /*background-size: cover;*/
+}
+
+h1 {
+    font-family: pacifico;
+    text-align: center;
+    margin-top: 20px;
+    color: #4CAF50;
+    font-size: 45px;
+}
+
+#parkingtable {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+#parkingtable td, #parkingtable th {
+    border: 1px solid #ddd;
+    text-align: left;
+    padding: 8px;
+}
+
+#parkingtable tr:nth-child(even){background-color: #f2f2f2}
+
+#parkingtable tr:hover {background-color: #ddd;}
+
+#parkingtable tr {
+    background-color: white;
+}
+
+#parkingtable th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    background-color: #4CAF50;
+    color: white;
+}
+
+body {
+    background: url("../images/concrete_wall.png");
+    /*background-size: cover;*/
+}
