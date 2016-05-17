@@ -17,12 +17,12 @@ File Directory
 |   +-- images
 ```
 
-TODO's
+## TODO's
 
-## Website Related
+### Website Related
 - Make the database for pulling previous data
 
-## Hardware Related
+### Hardware Related
 - WIFI connection
 - Power Supply for photon and the raspberry pi
 - 3D-printing for the sensor covers
