@@ -6,24 +6,28 @@ var io = require('socket.io')(server);
 var fs = require('fs');
 var port = process.env.PORT || 3000;
 var Particle = require('particle-api-js');
+var MongoClient = require('mongodb').MongoClient;
 
 var particle = new Particle();
 
-var spots = [];
+var prev_data = [];
 
-function getDataFromParticleCloud(variable) {
-  particle.getVariable({ deviceId: '310047000447343232363230',
-                         name: variable,
-                         auth: 'f8093528e7b81caceeaecd0569423df524dffbab'
-                       }).then(function(data) {
-                          console.log('Device variable retrieved successfully:', data.body);
-                          spots[variable] = data.body.occupied;
-                          // If occupied, update the table, 
-                          // If not occupied, "Vacant"
-                        }, function(err) {
-                          //console.log('An error occurred while getting attrs:', err);
-                        });  
-}
+io.on('connection', function(socket){
+  particle.getEventStream({name: 'EE475Capstone-SpotChanged', auth: 'f8093528e7b81caceeaecd0569423df524dffbab'}).then(function(stream) {
+    stream.on('event', function(data) {
+      // Gives the spot number
+      console.log("Data[data]  " + data["data"]);
+      spot_data = data["data"].split("-");
+      // Gives the device ID
+      var deviceId = data["coreid"];
+      prev_data[spot_data[0]] = spot_data[1];
+      socket.emit("updateTable", {"occupied" : spot_data[1], "term" : spot_data[0]});
+      console.log("Previous data on the server side is :" + prev_data);
+      socket.emit("prev", prev_data);
+    });
+  });
+});
+
 
 
 server.listen(port, function () {
@@ -35,20 +39,11 @@ server.listen(port, function () {
 app.use(express.static(__dirname + '/public'));
 
 
-io.on('connection', function(socket){
-   console.log('connection');
-
-  socket.on('CH01', function (from, msg) {
-    console.log('MSG', from, ' saying ', msg);
-  });
-
-});
-
-
 io.on("connection", function (socket) {  
     // to make things interesting, have it send every second
     var interval = setInterval(function () {
-      socket.emit("receiveData", {"Message": "Hello from the server"}); 
+      socket.emit("receiveData", {"Message": "Hello from the server"});
+
     }, 10000);
 
     socket.on("searchPhrase", function (searchTerm) {
