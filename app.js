@@ -118,11 +118,11 @@ io.sockets.on("connection", function (socket) {
         var key = childSnapshot.key();
         // childData will be the actual contents of the child
         var childData = childSnapshot.val();
-        console.log("key: " + key + " data: " + childData);
+        var r = "key " + key + " data: " + childData;
+        console.log(r);
+        io.sockets.emit("receiveData", r);
       });
     });
-
-      io.sockets.emit("receiveData", "hello");
 
     }, 10000);
 
