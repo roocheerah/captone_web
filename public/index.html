@@ -59,9 +59,9 @@
 			console.log("Connected!");
 		});
 
-		socket.on("receiveData", function(message) { 
+		socket.on("receiveData", function(prev_values) { 
 			console.log("INSIDE RECEIVE ON CLIENT");
-	    	console.log(message);
+	    	console.log(prev_values);
 		});
 
 		socket.on("prev", function(prev_data) { 
