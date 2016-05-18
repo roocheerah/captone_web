@@ -134,8 +134,8 @@ io.sockets.on("connection", function (socket) {
           // Keeps replacing the spot with the new one
           var insert_val = {};
           // TODO: Change to occupied or not 
-          insert_val[searchTerm] = 1;
-          myFirebaseRef.set(insert_val);
+          //insert_val[searchTerm] = 1;
+          myFirebaseRef.child(searchTerm).set(1);
           //myFirebaseRef.once("value", function(snapshot) { console.log(snapshot.child("occupied").val()); });
           io.sockets.emit("updateTable", {"occupied" : "spots[searchTerm]", "term" : searchTerm});
         }
