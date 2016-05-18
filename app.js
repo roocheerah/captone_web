@@ -85,8 +85,17 @@ var db = mongoose.connection;
 
 
 var particle = new Particle();
-var myFirebaseRef = new Firebase("https://capstoneee475.firebaseio.com/");
+var myFirebaseRef = new Firebase("https://capstoneee475.firebaseio.com/ ");
 
+myFirebaseRef.set({
+  title: "Hello World!",
+  author: "Firebase",
+  location: {
+    city: "San Francisco",
+    state: "California",
+    zip: 94103
+  }
+});
 
 io.on('connection', function(socket){
   particle.getEventStream({name: 'EE475Capstone-SpotChanged', auth: 'f8093528e7b81caceeaecd0569423df524dffbab'}).then(function(stream) {
