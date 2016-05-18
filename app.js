@@ -118,7 +118,7 @@ app.use(express.static(__dirname + '/public'));
 io.sockets.on("connection", function (socket) {  
     // to make things interesting, have it send every second
     var interval = setInterval(function () {
-      socket.emit("receiveData", {"Message": "Hello from the server"});
+      io.sockets.emit("receiveData", {"Message": "Hello from the server"});
 
     }, 10000);
 
