@@ -6,7 +6,80 @@ var io = require('socket.io')(server);
 var fs = require('fs');
 var port = process.env.PORT || 3000;
 var Particle = require('particle-api-js');
-var MongoClient = require('mongodb').MongoClient;
+var mongoose = require( 'mongoose');
+
+mongoose.connect('mongodb://localhost:27017/parking');
+var Schema = mongoose.Schema;
+var spotContent = new Schema({
+    spot    : {type: String,  index: true},
+    occupied    : Number,
+    updated_at : Date
+});
+
+var spotDB = mongoose.model( 'spotContent', spotContent);
+var db = mongoose.connection;
+
+function updateDB (spot_id){
+  var db = mongoose.connection;
+  db.on('open', function(){  
+    console.log("inside the db.on");
+    var new_spot_entry = new spotDB({
+      spot: spot_id,
+      occupied: 1,
+      updated_at: new Date()
+    });
+
+    new_spot_entry.save(function(err){
+      if (err) throw err;
+      console.log("Spot Saved Successfully");
+    });
+  });
+}
+
+/*db.once('open', function(){
+  console.log("Connected to DB");
+  //do operations which involve interacting with DB.
+
+  var spot_0 = new spotDB({
+    spot: "spot_0",
+    occupied: 0,
+    updated_at: new Date()
+  });
+
+  spot_0.save(function(err){
+    if ( err ) throw err;
+    console.log("Spot Saved Successfully");
+  });
+
+  var spot_1 = new spotDB({
+    spot: "spot_1",
+    occupied: 0,
+    updated_at: new Date()
+  });
+
+  spot_1.save(function(err){
+    if ( err ) throw err;
+    console.log("Spot Saved Successfully");
+  });
+
+  var spot_2 = new spotDB({
+    spot: "spot_2",
+    occupied: 0,
+    updated_at: new Date()
+  });
+
+  spot_2.save(function(err){
+    if ( err ) throw err;
+    console.log("Spot Saved Successfully");
+  });
+}); */
+
+app.get('/parking', function(req, res) {
+  mongoose.model('spotContent').find(function(err, parking) {
+    res.send(parking);
+  })
+});
+
 
 var particle = new Particle();
 
@@ -50,8 +123,8 @@ io.on("connection", function (socket) {
         //console.log("inside searchPhrase server");
         if (searchTerm.length > 0) {
           console.log("search phrase is: " + searchTerm);
-          getDataFromParticleCloud(searchTerm);
-          socket.emit("updateTable", {"occupied" : spots[searchTerm], "term" : searchTerm});
+          updateDB(searchTerm);
+          //socket.emit("updateTable", {"occupied" : spots[searchTerm], "term" : searchTerm});
         }
     });
 

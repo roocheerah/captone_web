@@ -1,0 +1,8 @@
+{
+  "name": "capstone475",
+  "description": "A barebones Node.js app using Express 4",
+  "repository": "https://github.com/heroku/capstone475",
+  "logo": "http://node-js-sample.herokuapp.com/node.svg",
+  "keywords": ["node", "express", "static"],
+  "image": "heroku/nodejs"
+}
