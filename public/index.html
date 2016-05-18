@@ -69,7 +69,7 @@
 		socket.on("prev", function(prev_data) { 
 	    	for (i in prev_data) {
 	    		console.log("Previous data on the client side is: "+ prev_data);
-	    		console.log(prev_data[i]);
+	    		console.log(prev_data["key"]);
 	    	}
 		});
 

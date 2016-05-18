@@ -47,7 +47,7 @@ io.sockets.on("connection", function (socket) {
         prev_values[key] = childData;
         var r = "key " + key + " data: " + childData;
         console.log(r);
-        io.sockets.emit("receiveData", prev_values);
+        io.sockets.emit("receiveData", {"key": key, "data": childData});
       });
     });
 
