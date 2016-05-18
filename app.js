@@ -16,6 +16,7 @@ var prev_values = [];
 
 io.on('connection', function(socket){
   particle.getEventStream({name: 'EE475Capstone-SpotChanged', auth: 'f8093528e7b81caceeaecd0569423df524dffbab'}).then(function(stream) {
+    
     stream.on('event', function(data) {
       // Gives the spot number
       console.log("Data[data]  " + data["data"]);
@@ -24,7 +25,9 @@ io.on('connection', function(socket){
       var deviceId = data["coreid"];
       io.sockets.emit("updateTable", {"occupied" : spot_data[1], "term" : spot_data[0]});
     });
+
   });
+  
 });
 
 server.listen(port, function () {
@@ -44,9 +47,6 @@ io.sockets.on("connection", function (socket) {
         var key = childSnapshot.key();
         // childData will be the actual contents of the child
         var childData = childSnapshot.val();
-        prev_values[key] = childData;
-        var r = "key " + key + " data: " + childData;
-        console.log(r);
         io.sockets.emit("receiveData", {"term": key, "occupied": childData});
       });
     });
