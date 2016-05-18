@@ -8,7 +8,8 @@ var io = require('socket.io')(server);
 var fs = require('fs');
 var port = process.env.PORT || 3000;
 var Particle = require('particle-api-js');
-var mongoose = require( 'mongoose');
+var Firebase = require("firebase");
+/*var mongoose = require( 'mongoose');
 
 mongoose.connect('mongodb://localhost:27017/parking');
 var Schema = mongoose.Schema;
@@ -21,7 +22,7 @@ var spotContent = new Schema({
 var spotDB = mongoose.model( 'spotContent', spotContent);
 var db = mongoose.connection;
 
-function updateDB (spot_id){
+/*function updateDB (spot_id){
   var db = mongoose.connection;
   db.on('open', function(){  
     console.log("inside the db.on");
@@ -36,7 +37,7 @@ function updateDB (spot_id){
       console.log("Spot Saved Successfully");
     });
   });
-}
+}*/
 
 /*db.once('open', function(){
   console.log("Connected to DB");
@@ -76,16 +77,15 @@ function updateDB (spot_id){
   });
 }); */
 
-app.get('/parking', function(req, res) {
+/*app.get('/parking', function(req, res) {
   mongoose.model('spotContent').find(function(err, parking) {
     res.send(parking);
   })
-});
+});*/
 
 
 var particle = new Particle();
-
-var prev_data = [];
+var myFirebaseRef = new Firebase("https://capstoneee475.firebaseio.com/");
 
 
 io.on('connection', function(socket){
@@ -101,16 +101,12 @@ io.on('connection', function(socket){
   });
 });
 
-
-
 server.listen(port, function () {
   console.log('Server listening at port %d', port);
 });
 
-
 // Setting up the express server
 app.use(express.static(__dirname + '/public'));
-
 
 io.sockets.on("connection", function (socket) {  
     // to make things interesting, have it send every second
@@ -123,7 +119,7 @@ io.sockets.on("connection", function (socket) {
         //console.log("inside searchPhrase server");
         if (searchTerm.length > 0) {
           console.log("search phrase is: " + searchTerm);
-          updateDB(searchTerm);
+          //updateDB(searchTerm);
           io.sockets.emit("updateTable", {"occupied" : "spots[searchTerm]", "term" : searchTerm});
         }
     });

@@ -12,6 +12,7 @@
   "dependencies": {
     "ejs": "2.4.1",
     "express": "4.13.3",
+    "firebase": "^2.4.2",
     "pg": "4.5.5"
   },
   "repository": {
