@@ -22,7 +22,7 @@ var spotContent = new Schema({
 var spotDB = mongoose.model( 'spotContent', spotContent);
 var db = mongoose.connection;
 
-/*function updateDB (spot_id){
+function updateDB (spot_id){
   var db = mongoose.connection;
   db.on('open', function(){  
     console.log("inside the db.on");
@@ -37,7 +37,7 @@ var db = mongoose.connection;
       console.log("Spot Saved Successfully");
     });
   });
-}*/
+}
 
 /*db.once('open', function(){
   console.log("Connected to DB");
@@ -87,15 +87,6 @@ var db = mongoose.connection;
 var particle = new Particle();
 var myFirebaseRef = new Firebase("https://capstoneee475.firebaseio.com/ ");
 
-myFirebaseRef.set({
-  title: "Hello World!",
-  author: "Firebase",
-  location: {
-    city: "San Francisco",
-    state: "California",
-    zip: 94103
-  }
-});
 
 io.on('connection', function(socket){
   particle.getEventStream({name: 'EE475Capstone-SpotChanged', auth: 'f8093528e7b81caceeaecd0569423df524dffbab'}).then(function(stream) {
@@ -129,6 +120,11 @@ io.sockets.on("connection", function (socket) {
         if (searchTerm.length > 0) {
           console.log("search phrase is: " + searchTerm);
           //updateDB(searchTerm);
+          myFirebaseRef.set({
+            spot: searchTerm,
+            date: new Date(),
+            occupied: 1
+          });
           io.sockets.emit("updateTable", {"occupied" : "spots[searchTerm]", "term" : searchTerm});
         }
     });
