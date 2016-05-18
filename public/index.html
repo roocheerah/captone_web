@@ -92,9 +92,9 @@
 			if (str != "none") {
 				var searchTerm = $(this).find('option:selected').text();
 				//console.log(searchTerm);
-				socket.broadcast.emit("searchPhrase", str);
+				socket.emit("searchPhrase", str);
 			} else {
-				socket.broadcast.emit("searchPhrase", "");
+				socket.emit("searchPhrase", "");
 			}
 		});
 

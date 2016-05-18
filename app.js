@@ -115,7 +115,7 @@ server.listen(port, function () {
 app.use(express.static(__dirname + '/public'));
 
 
-io.on("connection", function (socket) {  
+io.sockets.on("connection", function (socket) {  
     // to make things interesting, have it send every second
     var interval = setInterval(function () {
       socket.emit("receiveData", {"Message": "Hello from the server"});
@@ -127,7 +127,7 @@ io.on("connection", function (socket) {
         if (searchTerm.length > 0) {
           console.log("search phrase is: " + searchTerm);
           //updateDB(searchTerm);
-          socket.broadcast.emit("updateTable", {"occupied" : "spots[searchTerm]", "term" : searchTerm});
+          io.sockets.emit("updateTable", {"occupied" : "spots[searchTerm]", "term" : searchTerm});
         }
     });
 
