@@ -135,11 +135,7 @@ io.on("connection", function (socket) {
         }
     });
 
-    /*socket.on("disconnect", function () {
-        clearInterval(interval);
-    });*/
-
-    socket.on("close", function () {
+    socket.on("disconnect", function () {
         clearInterval(interval);
     });
 });
