@@ -62,6 +62,7 @@
 		socket.on("receiveData", function(prev_values) { 
 			console.log("INSIDE RECEIVE ON CLIENT");
 			for(i in prev_values) {
+				console.log(prev_values["key"] + " " prev_values["data"]);
 		    	console.log(prev_values[i]);
 		    }
 		});
