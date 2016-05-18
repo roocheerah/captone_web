@@ -10,7 +10,7 @@ var port = process.env.PORT || 3000;
 var Particle = require('particle-api-js');
 var mongoose = require( 'mongoose');
 
-/*mongoose.connect('mongodb://localhost:27017/parking');
+mongoose.connect('mongodb://localhost:27017/parking');
 var Schema = mongoose.Schema;
 var spotContent = new Schema({
     spot    : {type: String,  index: true},
@@ -36,7 +36,7 @@ function updateDB (spot_id){
       console.log("Spot Saved Successfully");
     });
   });
-}*/
+}
 
 /*db.once('open', function(){
   console.log("Connected to DB");
@@ -96,10 +96,7 @@ io.on('connection', function(socket){
       spot_data = data["data"].split("-");
       // Gives the device ID
       var deviceId = data["coreid"];
-      prev_data[spot_data[0]] = spot_data[1];
-      socket.emit("updateTable", {"occupied" : spot_data[1], "term" : spot_data[0]});
-      console.log("Previous data on the server side is :" + prev_data);
-      socket.emit("prev", prev_data);
+      io.sockets.emit("updateTable", {"occupied" : spot_data[1], "term" : spot_data[0]});
     });
   });
 });
@@ -126,7 +123,7 @@ io.sockets.on("connection", function (socket) {
         //console.log("inside searchPhrase server");
         if (searchTerm.length > 0) {
           console.log("search phrase is: " + searchTerm);
-          //updateDB(searchTerm);
+          updateDB(searchTerm);
           io.sockets.emit("updateTable", {"occupied" : "spots[searchTerm]", "term" : searchTerm});
         }
     });
