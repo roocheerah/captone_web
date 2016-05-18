@@ -2,6 +2,8 @@
 var express = require('express');
 var app = express();
 var server = require('http').Server(app);
+//var io = require("ws").Server
+
 var io = require('socket.io')(server);
 var fs = require('fs');
 var port = process.env.PORT || 3000;
@@ -85,6 +87,11 @@ var particle = new Particle();
 
 var prev_data = [];
 
+io.configure(function () {  
+  io.set("transports", ["xhr-polling"]); 
+  io.set("polling duration", 10); 
+});
+
 io.on('connection', function(socket){
   particle.getEventStream({name: 'EE475Capstone-SpotChanged', auth: 'f8093528e7b81caceeaecd0569423df524dffbab'}).then(function(stream) {
     stream.on('event', function(data) {
@@ -128,7 +135,11 @@ io.on("connection", function (socket) {
         }
     });
 
-    socket.on("disconnect", function () {
+    /*socket.on("disconnect", function () {
+        clearInterval(interval);
+    });*/
+
+    socket.on("close", function () {
         clearInterval(interval);
     });
 });
