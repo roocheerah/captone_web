@@ -111,7 +111,18 @@ app.use(express.static(__dirname + '/public'));
 io.sockets.on("connection", function (socket) {  
     // to make things interesting, have it send every second
     var interval = setInterval(function () {
-      io.sockets.emit("receiveData", {"Message": "Hello from the server"});
+      myFirebaseRef.once("value", function(snapshot) {
+      // The callback function will get called twice, once for "fred" and once for "barney"
+      snapshot.forEach(function(childSnapshot) {
+        // key will be "fred" the first time and "barney" the second time
+        var key = childSnapshot.key();
+        // childData will be the actual contents of the child
+        var childData = childSnapshot.val();
+        console.log("key: " + key + " data: " + childData);
+      });
+    });
+
+      io.sockets.emit("receiveData", "hello");
 
     }, 10000);
 
@@ -120,11 +131,12 @@ io.sockets.on("connection", function (socket) {
         if (searchTerm.length > 0) {
           console.log("search phrase is: " + searchTerm);
           //updateDB(searchTerm);
-          myFirebaseRef.set({
-            spot: searchTerm,
-            date: new Date(),
-            occupied: 1
-          });
+          // Keeps replacing the spot with the new one
+          var insert_val = {};
+          // TODO: Change to occupied or not 
+          insert_val[searchTerm] = 1;
+          myFirebaseRef.set(insert_val);
+          //myFirebaseRef.once("value", function(snapshot) { console.log(snapshot.child("occupied").val()); });
           io.sockets.emit("updateTable", {"occupied" : "spots[searchTerm]", "term" : searchTerm});
         }
     });
