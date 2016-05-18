@@ -27,7 +27,7 @@ io.on('connection', function(socket){
     });
 
   });
-  
+
 });
 
 server.listen(port, function () {
@@ -51,7 +51,7 @@ io.sockets.on("connection", function (socket) {
       });
     });
 
-    }, 10000);
+    }, 1000);
 
     socket.on("searchPhrase", function (searchTerm) {
         //console.log("inside searchPhrase server");
