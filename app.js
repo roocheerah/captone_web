@@ -87,10 +87,6 @@ var particle = new Particle();
 
 var prev_data = [];
 
-io.configure(function () {  
-  io.set("transports", ["xhr-polling"]); 
-  io.set("polling duration", 10); 
-});
 
 io.on('connection', function(socket){
   particle.getEventStream({name: 'EE475Capstone-SpotChanged', auth: 'f8093528e7b81caceeaecd0569423df524dffbab'}).then(function(stream) {
