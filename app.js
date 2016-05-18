@@ -127,7 +127,7 @@ io.on("connection", function (socket) {
         if (searchTerm.length > 0) {
           console.log("search phrase is: " + searchTerm);
           //updateDB(searchTerm);
-          //socket.emit("updateTable", {"occupied" : spots[searchTerm], "term" : searchTerm});
+          socket.emit("updateTable", {"occupied" : spots[searchTerm], "term" : searchTerm});
         }
     });
 
