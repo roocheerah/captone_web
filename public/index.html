@@ -19,6 +19,10 @@
 	    <td>Spot 0</td>
 	    <td id="spot_0"></td>
 	  </tr>
+	  <tr>
+	    <td>Spot 1</td>
+	    <td id="spot_1"></td>
+	  </tr>
 	</table>
 
 	<br/>
@@ -62,6 +66,12 @@
 	        console.log("JS NORMAL: " + document.getElementById(prev_values.term) === null);
 	        /*if (document.getElementById(prev_values.term) === null) {
 	        	console.log("inside creating a new table element");
+	        	var table = document.getElementById("parkingtable");
+				var row = table.insertRow(0);
+				var cell1 = row.insertCell(0);
+				var cell2 = row.insertCell(1);
+
+
 	        	var new_id = id + "_new";
 	        	// create a new entry in the table
 	        	var tr = document.createElement("TR");
