@@ -52,8 +52,8 @@
 		});
 
 		socket.on("receiveData", function(prev_values) { 
-			console.log("INSIDE RECEIVE ON CLIENT");
-			console.log(prev_values.term + " " + prev_values.occupied);
+			//console.log("INSIDE RECEIVE ON CLIENT");
+			//console.log(prev_values.term + " " + prev_values.occupied);
 	    	//console.log(prev_values[i]);
 	    	var occupied = "" + prev_values.occupied;
 	    	var id = "#" + prev_values.term;
