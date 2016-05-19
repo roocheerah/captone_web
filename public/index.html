@@ -58,8 +58,8 @@
 	    	var occupied = "" + prev_values.occupied;
 	    	var id = "#" + prev_values.term;
 	        //console.log("id: " + id);
-	        console.log($(id) === null);
-	        console.log(document.getElementById(prev_values.term) === null);
+	        console.log("JQuery: " + $(id) === null);
+	        console.log("JS NORMAL: " + document.getElementById(prev_values.term) === null);
 	        if ($(id) === null) {
 	        	console.log("inside creating a new table element");
 	        	var new_id = id + "_new";
