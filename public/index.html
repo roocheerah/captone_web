@@ -16,15 +16,15 @@
 	    <th>Status</th>
 	  </tr>
 	  <tr>
-	    <td>Spot 1</td>
+	    <td>Spot 0</td>
 	    <td id="spot_0"></td>
 	  </tr>
 	  <tr>
-	    <td>Spot 2</td>
+	    <td>Spot 1</td>
 	    <td id="spot_1"></td>
 	  </tr>
 	  <tr>
-	    <td>Spot 3</td>
+	    <td>Spot 2</td>
 	    <td  id="spot_2"></td>
 	  </tr>
 	</table>
@@ -66,6 +66,10 @@
 	    	var occupied = "" + prev_values.occupied;
 	    	var id = "#" + prev_values.term;
 	        console.log("id: " + id);
+	        if ($(id) === null) {
+	        	// create a new entry in the table
+	        	$("#parkingtable").append($("tr").attr("id", id));
+	        }
 	    	$(id).html(occupied);
 		});
 	
@@ -74,16 +78,6 @@
 	    		console.log("Previous data on the client side is: "+ prev_data);
 	    		console.log(prev_data["key"]);
 	    	}
-		});
-
-		socket.on("updateTable", function(status) { 
-			console.log("INSIDE updateTable ON CLIENT");
-	    	console.log("status: " + status.occupied);
-	    	var occupied = "" + status.occupied;
-	    	var id = "#" + status.term;
-	        console.log("id: " + id);
-	    	$(id).html(status.occupied);
-	    	//document.getElementById(id).value = occupied;
 		});
 
 		$("#search_list").change(function() {
