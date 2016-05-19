@@ -29,7 +29,7 @@ var prev_values = [];
 });*/
 
 server.listen(port, function () {
-  console.log('Server listening at port %d', port);
+  //console.log('Server listening at port %d', port);
 });
 
 // Setting up the express server
@@ -50,19 +50,19 @@ io.sockets.on("connection", function (socket) {
     particle.getEventStream({name: 'EE475Capstone-SpotChanged', auth: 'f8093528e7b81caceeaecd0569423df524dffbab'}).then(function(stream) {
       stream.on('event', function(data) {
         // Gives the spot number
-        console.log("Data[data]  " + data["data"]);
+        //console.log("Data[data]  " + data["data"]);
         spot_data = data["data"].split("-");
         // Gives the device ID
         var deviceId = data["coreid"];
         myFirebaseRef.child(spot_data[0]).set(spot_data[1]);
-        //io.sockets.emit("updateTable", {"occupied" : spot_data[1], "term" : spot_data[0]});
+        //io.sockets.emit("receiveData", {"occupied" : spot_data[1], "term" : spot_data[0]});
       });
     });
 
     socket.on("searchPhrase", function (searchTerm) {
         //console.log("inside searchPhrase server");
         if (searchTerm.length > 0) {
-          console.log("search phrase is: " + searchTerm);
+          //console.log("search phrase is: " + searchTerm);
           var insert_val = {};
           // Set option to occupied here
           myFirebaseRef.child(searchTerm).set(1);
