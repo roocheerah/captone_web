@@ -60,14 +60,18 @@
 	        //console.log("id: " + id);
 	        console.log("JQuery: " + $(id) === null);
 	        console.log("JS NORMAL: " + document.getElementById(prev_values.term) === null);
-	        if (document.getElementById(prev_values.term) === null) {
+	        /*if (document.getElementById(prev_values.term) === null) {
 	        	console.log("inside creating a new table element");
 	        	var new_id = id + "_new";
 	        	// create a new entry in the table
+	        	var tr = document.createElement("TR");
+	        	var td1 = document.createElement("TD");
+	        	var td2 = document.createElement("TD");
+
 	        	$("#parkingtable").append($("tr").attr("id", new_id));
 	        	$(new_id).append($("td").html(prev_values.term));
 	        	$(new_id).append($("td").attr("id", id));
-	        }
+	        }*/
 	    	$(id).html(occupied);
 		});
 	
