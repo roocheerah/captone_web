@@ -19,14 +19,6 @@
 	    <td>Spot 0</td>
 	    <td id="spot_0"></td>
 	  </tr>
-	  <tr>
-	    <td>Spot 1</td>
-	    <td id="spot_1"></td>
-	  </tr>
-	  <tr>
-	    <td>Spot 2</td>
-	    <td  id="spot_2"></td>
-	  </tr>
 	</table>
 
 	<br/>
@@ -67,8 +59,11 @@
 	    	var id = "#" + prev_values.term;
 	        console.log("id: " + id);
 	        if ($(id) === null) {
+	        	var new_id = id + "_new";
 	        	// create a new entry in the table
-	        	$("#parkingtable").append($("tr").attr("id", id));
+	        	$("#parkingtable").append($("tr").attr("id", new_id));
+	        	$(new_id).append($("td");
+	        	$(new_id).append($("td").attr("id", id));
 	        }
 	    	$(id).html(occupied);
 		});
