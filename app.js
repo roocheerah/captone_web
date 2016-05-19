@@ -51,7 +51,7 @@ io.sockets.on("connection", function (socket) {
       });
     });
 
-    }, 1000);
+    }, 50);
 
     socket.on("searchPhrase", function (searchTerm) {
         //console.log("inside searchPhrase server");
