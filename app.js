@@ -64,7 +64,7 @@ io.sockets.on("connection", function (socket) {
           //insert_val[searchTerm] = 1;
           myFirebaseRef.child(searchTerm).set(1);
           //myFirebaseRef.once("value", function(snapshot) { console.log(snapshot.child("occupied").val()); });
-          io.sockets.emit("updateTable", {"occupied" : "spots[searchTerm]", "term" : searchTerm});
+          io.sockets.emit("updateTable", {"occupied" : "1", "term" : searchTerm});
         }
     });
 
