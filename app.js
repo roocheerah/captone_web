@@ -50,7 +50,6 @@ io.sockets.on("connection", function (socket) {
         io.sockets.emit("receiveData", {"term": key, "occupied": childData});
       });
     });
-
     }, 50);
 
     socket.on("searchPhrase", function (searchTerm) {
@@ -64,7 +63,7 @@ io.sockets.on("connection", function (socket) {
           //insert_val[searchTerm] = 1;
           myFirebaseRef.child(searchTerm).set(1);
           //myFirebaseRef.once("value", function(snapshot) { console.log(snapshot.child("occupied").val()); });
-          io.sockets.emit("updateTable", {"occupied" : "1", "term" : searchTerm});
+          //io.sockets.emit("updateTable", {"occupied" : "1", "term" : searchTerm});
         }
     });
 
