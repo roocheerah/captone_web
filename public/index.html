@@ -60,7 +60,7 @@
 	        //console.log("id: " + id);
 	        console.log("JQuery: " + $(id) === null);
 	        console.log("JS NORMAL: " + document.getElementById(prev_values.term) === null);
-	        if ($(id) === null) {
+	        if (document.getElementById(prev_values.term) === null) {
 	        	console.log("inside creating a new table element");
 	        	var new_id = id + "_new";
 	        	// create a new entry in the table
