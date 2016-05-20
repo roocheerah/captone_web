@@ -8,25 +8,13 @@ var io = require('socket.io')(server);
 var fs = require('fs');
 var port = process.env.PORT || 3000;
 var Particle = require('particle-api-js');
-var Firebase = require("firebase");
+var firebase = require("firebase");
 
 var particle = new Particle();
-var myFirebaseRef = new Firebase("https://capstoneee475.firebaseio.com/");
+var db = new firebase("https://capstoneee475.firebaseio.com/");
 var prev_values = [];
 
-/*io.on('connection', function(socket){
-  particle.getEventStream({name: 'EE475Capstone-SpotChanged', auth: 'f8093528e7b81caceeaecd0569423df524dffbab'}).then(function(stream) {
-    stream.on('event', function(data) {
-      // Gives the spot number
-      console.log("Data[data]  " + data["data"]);
-      spot_data = data["data"].split("-");
-      // Gives the device ID
-      var deviceId = data["coreid"];
-      io.sockets.emit("updateTable", {"occupied" : spot_data[1], "term" : spot_data[0]});
-    });
-  });
 
-});*/
 
 server.listen(port, function () {
   //console.log('Server listening at port %d', port);
@@ -38,10 +26,13 @@ app.use(express.static(__dirname + '/public'));
 io.sockets.on("connection", function (socket) {  
     // to make things interesting, have it send every second
     var interval = setInterval(function () {
-      myFirebaseRef.once("value", function(snapshot) {
+      //myFirebaseRef.once("value", function(snapshot) {
+      db.on("value", function(snapshot) {  
         snapshot.forEach(function(childSnapshot) {
+          //console.log("inside interval");
           var key = childSnapshot.key();
           var childData = childSnapshot.val();
+          //console.log(key + " " + childData);
           io.sockets.emit("receiveData", {"term": key, "occupied": childData});
         });
       });
@@ -54,7 +45,8 @@ io.sockets.on("connection", function (socket) {
         spot_data = data["data"].split("-");
         // Gives the device ID
         var deviceId = data["coreid"];
-        myFirebaseRef.child(spot_data[0]).set(spot_data[1]);
+        //myFirebaseRef.child(spot_data[0]).set(spot_data[1]);
+        db.child(spot_data[0]).set(spot_data[1]);
         //io.sockets.emit("receiveData", {"occupied" : spot_data[1], "term" : spot_data[0]});
       });
     });
@@ -65,7 +57,7 @@ io.sockets.on("connection", function (socket) {
           //console.log("search phrase is: " + searchTerm);
           var insert_val = {};
           // Set option to occupied here
-          myFirebaseRef.child(searchTerm).set(1);
+          db.child(searchTerm).set(1);
         }
     });
 

@@ -9,20 +9,21 @@
 	</script>
 </head>
 <body>
+
 	<h1>Parking Status for Capitol Hill Parking</h1>
 	<table id="parkingtable">
-	  <tr>
+	 <tr>
 	    <th>Spot</th>
 	    <th>Status</th>
 	  </tr>
-	  <tr>
+	<!--  <tr>
 	    <td>Spot 0</td>
 	    <td id="spot_0"></td>
 	  </tr>
 	  <tr>
 	    <td>Spot 1</td>
 	    <td id="spot_1"></td>
-	  </tr>
+	  </tr> -->
 	</table>
 
 	<br/>
@@ -56,33 +57,21 @@
 		});
 
 		socket.on("receiveData", function(prev_values) { 
-			//console.log("INSIDE RECEIVE ON CLIENT");
-			//console.log(prev_values.term + " " + prev_values.occupied);
-	    	//console.log(prev_values[i]);
-	    	var occupied = "" + prev_values.occupied;
-	    	var id = "#" + prev_values.term;
-	        //console.log("id: " + id);
-	        console.log("JQuery: " + $(id) === null);
-	        console.log("JS NORMAL: " + document.getElementById(prev_values.term) === null);
-	        /*if (document.getElementById(prev_values.term) === null) {
-	        	console.log("inside creating a new table element");
-	        	var table = document.getElementById("parkingtable");
-				var row = table.insertRow(0);
-				var cell1 = row.insertCell(0);
-				var cell2 = row.insertCell(1);
-
-
-	        	var new_id = id + "_new";
-	        	// create a new entry in the table
+	    	var occupied = prev_values.occupied;
+	    	var id = prev_values.term;
+	        if (document.getElementById(id) === null) {
 	        	var tr = document.createElement("TR");
 	        	var td1 = document.createElement("TD");
+	        	td1.innerHTML =  prev_values.term;
 	        	var td2 = document.createElement("TD");
-
-	        	$("#parkingtable").append($("tr").attr("id", new_id));
-	        	$(new_id).append($("td").html(prev_values.term));
-	        	$(new_id).append($("td").attr("id", id));
-	        }*/
-	    	$(id).html(occupied);
+	        	var att = document.createAttribute("id");       
+				att.value = id; 
+				td2.setAttributeNode(att);
+	        	tr.appendChild(td1);
+	        	tr.appendChild(td2);
+	        	document.getElementById("parkingtable").appendChild(tr);  
+	        }
+	        document.getElementById(id).innerHTML = occupied;
 		});
 	
 		socket.on("prev", function(prev_data) { 
