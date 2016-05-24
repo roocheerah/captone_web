@@ -51,12 +51,10 @@
 		
 		var socket = io();
 
-		window.onload()	= function() {
-			socket.on("connect", function () {
-				console.log("Connected!");
-			});
-			//socket.on("testing", function(prev_values))
-		}
+
+		socket.on("connect", function () {
+			console.log("Connected!");
+		});
 
 
 		//var socket = io.connect("https://capstoneee475.firebaseapp.com/", {reconnect: true});
