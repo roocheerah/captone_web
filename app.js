@@ -57,7 +57,7 @@ io.sockets.on("connection", function (socket) {
                                   var spot = "spot_" + i;
                                   console.log("Inside the for-loop with spot: " + spot);
                                   getDataFromParticleCloud(spot, id); //310047000447343232363230
-                                  flag = false;
+                                  //flag = false;
                                 }
                                 //return result;
                               }, function(err) {
@@ -74,6 +74,7 @@ io.sockets.on("connection", function (socket) {
                              }).then(function(data) {
                                 console.log('Device variable retrieved successfully:', data.body.result);
                                 //spots[variable] = data.body.occupied;
+                                //db.child(id).
                                 db.child(variable).set(data.body.result);
 
                                       // If occupied, update the table, 
