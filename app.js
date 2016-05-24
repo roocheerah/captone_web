@@ -28,7 +28,7 @@ io.sockets.on("connection", function (socket) {
     // to make things interesting, have it send every second
     var interval = setInterval(function () {
       if (flag) {
-        flag = false;
+        //flag = false;
         getNumVariable('310047000447343232363230');
         //console.log(num_vars);
       }
