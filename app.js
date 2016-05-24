@@ -57,6 +57,7 @@ io.sockets.on("connection", function (socket) {
                                   var spot = "spot_" + i;
                                   console.log("Inside the for-loop with spot: " + spot);
                                   getDataFromParticleCloud(spot, id); //310047000447343232363230
+                                  flag = false;
                                 }
                                 //return result;
                               }, function(err) {
