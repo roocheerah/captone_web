@@ -11,7 +11,7 @@ var Particle = require('particle-api-js');
 var firebase = require("firebase");
 
 var particle = new Particle();
-var db = new firebase("https://capstone475.firebaseio.com/");
+var db = new firebase("https://capstoneee475.firebaseio.com/");
 var prev_values = [];
 
 
