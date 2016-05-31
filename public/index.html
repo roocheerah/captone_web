@@ -78,12 +78,6 @@
 	        document.getElementById(id).innerHTML = occupied;
 		});
 	
-		socket.on("prev", function(prev_data) { 
-	    	for (i in prev_data) {
-	    		//console.log("Previous data on the client side is: "+ prev_data);
-	    		//console.log(prev_data["key"]);
-	    	}
-		});
 
 		$("#search_list").change(function() {
 			// the search word change callback
