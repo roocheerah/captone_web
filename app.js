@@ -26,7 +26,7 @@ var DEVICE_ID_2 = '33003b000d47343233323032';
 //var DEVICE_ID_2 = '5678';
 
 /* FIREBASE CONSTANTS */
-var ROOT_PATH = 'https://giftprompt.firebaseio.com/';
+var ROOT_PATH = 'https://capstoneee475.firebaseio.com/';
 var root_db = new firebase(ROOT_PATH);
 
 // Stores the previous values from the last time it was checked in the database
@@ -119,7 +119,7 @@ io.sockets.on("connection", function (socket) {
               var status = childSnapshot.val();
               //console.log(spot);
               //console.log(status);
-              io.sockets.emit("receiveData", {"term": DEVICE_ID_1 + ' ' + spot, "occupied": status});
+              io.sockets.emit("receiveData", {"id": DEVICE_ID_1, "term": spot, "occupied": status});
 
            // });
           //}
@@ -148,7 +148,7 @@ io.sockets.on("connection", function (socket) {
               var status = childSnapshot.val();
               //console.log(spot);
               //console.log(status);
-              io.sockets.emit("receiveData", {"term": DEVICE_ID_2 + ' ' + spot, "occupied": status});
+              io.sockets.emit("receiveData", {"id": DEVICE_ID_2, "term": spot, "occupied": status});
 
            // });
           //}

@@ -13,8 +13,10 @@
 	<h1>Parking Status for Capitol Hill Parking</h1>
 	<table id="parkingtable">
 	 <tr>
+	 	<th>Device ID</th>
 	    <th>Spot</th>
 	    <th>Status</th>
+
 	  </tr>
 	<!--  <tr>
 	    <td>Spot 0</td>
@@ -62,17 +64,20 @@
 
 		socket.on("receiveData", function(prev_values) { 
 	    	var occupied = prev_values.occupied;
-	    	var id = prev_values.term;
+	    	var id = prev_values.id + " " + prev_values.term;
 	        if (document.getElementById(id) === null) {
 	        	var tr = document.createElement("TR");
 	        	var td1 = document.createElement("TD");
-	        	td1.innerHTML =  prev_values.term;
+	        	td1.innerHTML =  prev_values.id;
 	        	var td2 = document.createElement("TD");
+	        	td2.innerHTML = prev_values.term;
+	        	var td3 = document.createElement("TD");
 	        	var att = document.createAttribute("id");       
 				att.value = id; 
-				td2.setAttributeNode(att);
+				td3.setAttributeNode(att);
 	        	tr.appendChild(td1);
 	        	tr.appendChild(td2);
+	        	tr.appendChild(td3);
 	        	document.getElementById("parkingtable").appendChild(tr);  
 	        }
 	        document.getElementById(id).innerHTML = occupied;
