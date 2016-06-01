@@ -8,6 +8,8 @@ var io = require('socket.io')(server);
 
 // Set up the firebase db root
 var firebase = require("firebase");
+var time = require('time');
+
 
 // Particle Photon API set-up for node js
 var Particle = require('particle-api-js');
@@ -63,6 +65,9 @@ io.sockets.on("connection", function (socket) {
         //getNumVariable('PHOTON ID#');
       }
 
+
+      /*var now = time.time();
+
       // Checking first photon values
       var photon_1_db = root_db.child(DEVICE_ID_1);
 
@@ -86,42 +91,92 @@ io.sockets.on("connection", function (socket) {
           }
         });
 
+        //var diff = time.time() - now;
+        //console.log("Diff in between reading for photon_1_db is now: " + diff);
+
         //io.sockets.emit("receiveData", {"term": DEVICE_ID_1 + ' spot0', "occupied": 1});
 
-      });
+      }); */
 
+      // Checking first photon values
+      var photon_1_db = root_db.child(DEVICE_ID_1);
+
+      photon_1_db.on("value", function(snapshot) {
+        // Gives the number of spots
+        //var last_child = snapshot.numChildren();
+        //var last_child = snapshot.val()['children'];
+        //console.log('last_child ' + last_child);    
+        //var child_count = 0;
+        snapshot.forEach(function(childSnapshot) {
+          //child_count++;
+          // Last date in the photon device
+          //if (child_count === last_child) {
+            //console.log("inside the if");
+            //var date_db = photon_2_db.child(childSnapshot.key());
+            //date_db.on('child_added', function(dateChild, prev_key){
+              //console.log("inside the if");
+              var spot = childSnapshot.key();
+              var status = childSnapshot.val();
+              //console.log(spot);
+              //console.log(status);
+              io.sockets.emit("receiveData", {"term": DEVICE_ID_1 + ' ' + spot, "occupied": status});
+
+           // });
+          //}
+        });
+
+      });
       
       // Checking first photon values
       var photon_2_db = root_db.child(DEVICE_ID_2);
 
       photon_2_db.on("value", function(snapshot) {
-        // Gives the number of dates
-        var last_child = snapshot.numChildren();
+        // Gives the number of spots
+        //var last_child = snapshot.numChildren();
+        //var last_child = snapshot.val()['children'];
         //console.log('last_child ' + last_child);    
-        var child_count = 0;
+        //var child_count = 0;
         snapshot.forEach(function(childSnapshot) {
-          child_count++;
+          //child_count++;
           // Last date in the photon device
-          if (child_count === last_child) {
+          //if (child_count === last_child) {
             //console.log("inside the if");
-            var date_db = photon_2_db.child(childSnapshot.key());
-            date_db.on('child_added', function(dateChild, prev_key){
-              console.log("inside the if");
-              var spot = dateChild.key();
-              var status = dateChild.val()['occupied'];
-              console.log(spot);
-              console.log(status);
+            //var date_db = photon_2_db.child(childSnapshot.key());
+            //date_db.on('child_added', function(dateChild, prev_key){
+              //console.log("inside the if");
+              var spot = childSnapshot.key();
+              var status = childSnapshot.val();
+              //console.log(spot);
+              //console.log(status);
               io.sockets.emit("receiveData", {"term": DEVICE_ID_2 + ' ' + spot, "occupied": status});
 
-            });
-          }
+           // });
+          //}
         });
 
 
       });
       
 
-    }, 50);
+    }, 1000);
+
+
+    // Makes a new entry in the database
+    // Photon ID -> Unique Date -> Spot # -> occupied/not occupied
+    function firebaseEntry(deviceId, date, spot_num, status) {
+
+      //var now = time.time();
+
+      console.log("adding entry from device " + deviceId + " to spot " + spot_num);
+      var id_ref = root_db.child(deviceId);
+      //var date_ref = id_ref.child(date);
+      var spot_ref = id_ref.child(spot_num);
+      spot_ref.set(status);
+      //spot_ref.set({occupied: status});
+
+      //var diff = time.time() - now;
+      //console.log("Diff in time is now: " + diff);
+    }
 
 
     // Retrieves the number of spots each particle photon is keeping track of
@@ -139,12 +194,12 @@ io.sockets.on("connection", function (socket) {
     // Need a global flag for sampling each spot according to the variable
     function getDataFromParticleCloud(variable, id) {
         particle.getVariable({ deviceId: id, name: variable, auth: AUTH_TOKEN }).then(function(data) {
-                                console.log('Device variable retrieved successfully:', data.body.result);
+                                //console.log('Device variable retrieved successfully:', data.body.result);
                                 // Setting the values according to new format
-                                var date = data.body.coreInfo["last_heard"].split(".");
-                                date = date[0];
-                                console.log("date is now: " + date);
-                                firebaseEntry(id, date, variable, data.body.result);
+                                //var date = data.body.coreInfo["last_heard"].split(".");
+                                //date = date[0];
+                                //console.log("date is now: " + date);
+                                firebaseEntry(id, "date", variable, data.body.result);
 
                               }, function(err) {
                                 //console.log('An error occurred while getting attrs:', err);
@@ -153,28 +208,53 @@ io.sockets.on("connection", function (socket) {
 
 
     // Everytime an event changes call this function
-    particle.getEventStream({name: 'EE475Capstone-SpotChanged', auth: AUTH_TOKEN}).then(function(stream) {
+   particle.getEventStream({name: 'EE475Capstone-SpotChanged', auth: AUTH_TOKEN}).then(function(stream) {
                               stream.on('event', function(data) {
                                 // Gives the spot number
+                                console.log("in the particle EE475Capstone-SpotChanged stream");
                                 //console.log("Data[data]  " + data["data"]);
-                                spot_data = data["data"].split("-");
-                                var date = data["published-at"].split(".")[0];
+                                //console.log(data);
+                                var spot_data = data["data"].split("-");
+                                //var date = data["published-at"].split(".")[0];
                                 // Gives the device ID
-                                var deviceId = data["coreid"];
+                                //console.log("deviceId: " + deviceId);
                                 // Only records the spot that has changed
-                                firebaseEntry(deviceId, date, spot_data[0], spot_data[1]);
+                                firebaseEntry(data["coreid"], "date", spot_data[0], spot_data[1]);
+                                /*var id_ref = root_db.child(DEVICE_ID_1);
+                                var date_ref = id_ref.child(date);
+                                var spot_ref = date_ref.child(spot_data[0]);
+                                spot_ref.set({occupied: spot_data[1]});*/
+                                // need to increment the children node
+                                console.log("exitign particle EE475Capstone-SpotChanged stream");
                             });
     });
 
+    // Everytime an event changes call this function
+    /*particle.getEventStream({name: 'EE475Capstone-SpotChanged-1', auth: AUTH_TOKEN}).then(function(stream) {
+                              stream.on('event', function(data) {
+                                // Gives the spot number
+                                console.log("in the particle EE475Capstone-SpotChanged-1 stream");
+                                //console.log("Data[data]  " + data["data"]);
+                                //console.log(data);
+                                var spot_data = data["data"].split("-");
+                                //var date = data["published-at"].split(".")[0];
+                                console.log("after date");
+                                // Gives the device ID
+                                //console.log("deviceId: " + deviceId);
+                                // Only records the spot that has changed
+                                firebaseEntry(DEVICE_ID_2, "date", spot_data[0], spot_data[1]);
+                                //var id_ref = root_db.child(DEVICE_ID_2);
+                                //console.log("after id_ref");
+                                //var date_ref = id_ref.child(date);
+                                //console.log("after date_ref");
+                                //var spot_ref = date_ref.child(spot_data[0]);
+                                /*console.log("after spot_ref");
+                                spot_ref.set({occupied: spot_data[1]});
+                                console.log("after spot set"); 
+                                console.log("exitign particle EE475Capstone-SpotChanged-1 stream");
+                            });
+    });*/
 
-    // Makes a new entry in the database
-    // Photon ID -> Unique Date -> Spot # -> occupied/not occupied
-    function firebaseEntry(deviceId, date, spot_num, status) {
-      var id_ref = root_db.child(deviceId);
-      var date_ref = id_ref.child(date);
-      var spot_ref = date_ref.child(spot_num);
-      spot_ref.set({occupied: status});
-    }
     
     socket.on("disconnect", function () {
         clearInterval(interval);
